@@ -2,6 +2,7 @@ package cmd
 
 import (
 	"errors"
+	"github.com/replicatedhq/replicated/pkg/util"
 	"io"
 	"os"
 	"text/tabwriter"
@@ -119,10 +120,11 @@ func Execute(rootCmd *cobra.Command, stdin io.Reader, stdout io.Writer, stderr i
 	runCmds.rootCmd.AddCommand(releaseCmd)
 	runCmds.InitReleaseCreate(releaseCmd)
 	runCmds.InitReleaseInspect(releaseCmd)
-	runCmds.IniReleaseList(releaseCmd)
+	runCmds.InitReleaseList(releaseCmd)
 	runCmds.InitReleaseUpdate(releaseCmd)
 	runCmds.InitReleasePromote(releaseCmd)
 	runCmds.InitReleaseLint(releaseCmd)
+	runCmds.InitPrepareHelmValues(releaseCmd)
 
 	collectorsCmd := runCmds.InitCollectorsCommand(runCmds.rootCmd)
 	runCmds.InitCollectorList(collectorsCmd)
@@ -177,6 +179,8 @@ func Execute(rootCmd *cobra.Command, stdin io.Reader, stdout io.Writer, stderr i
 			}
 			runCmds.appID = app.ID
 		}
+
+		runCmds.helmConverter = util.NewHelmConverter()
 
 		return nil
 	}
