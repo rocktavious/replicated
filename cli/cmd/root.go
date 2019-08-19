@@ -125,6 +125,7 @@ func Execute(rootCmd *cobra.Command, stdin io.Reader, stdout io.Writer, stderr i
 	runCmds.InitReleasePromote(releaseCmd)
 	runCmds.InitReleaseLint(releaseCmd)
 	runCmds.InitPrepareHelmValues(releaseCmd)
+	runCmds.InitImportHelmChart(releaseCmd)
 
 	collectorsCmd := runCmds.InitCollectorsCommand(runCmds.rootCmd)
 	runCmds.InitCollectorList(collectorsCmd)

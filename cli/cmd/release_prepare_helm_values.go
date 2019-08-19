@@ -2,8 +2,10 @@ package cmd
 
 import (
 	"github.com/pkg/errors"
+	"github.com/replicatedhq/libyaml"
 	"github.com/replicatedhq/replicated/cli/print"
 	"github.com/spf13/cobra"
+	"gopkg.in/yaml.v2"
 	"io/ioutil"
 	"os"
 )
@@ -35,10 +37,24 @@ func (r *runners) prepareHelmValues(cmd *cobra.Command, args []string) error {
 		return errors.Wrap(err, "read values file %q")
 	}
 
-	newValues, _, err := r.helmConverter.ConvertValues(string(bytes))
+	newValues, configGroups, err := r.helmConverter.ConvertValues(string(bytes))
 	if err != nil {
 		return errors.Wrap(err, "convert Helm Values")
 	}
+	doc := libyaml.RootConfig{
+		ConfigGroups: configGroups,
+	}
 
-	return print.HelmValues(os.Stdout, newValues)
+	marshalled, err := yaml.Marshal(doc)
+	if err != nil {
+		return errors.Wrap(err, "marshall replicated YAML")
+	}
+
+	return print.HelmValues(os.Stdout, `
+---
+# kind: replicated
+` + string(marshalled) + `
+---
+# kind: helm-values
+` + newValues)
 }
