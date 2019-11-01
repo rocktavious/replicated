@@ -105,7 +105,7 @@ func cleanupApps() {
 		t.Fatal(err)
 	}
 
-	req, err := http.NewRequest("POST", idOrigin + "/v1/login", buf)
+	req, err := http.NewRequest("POST", idOrigin+"/v1/login", buf)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -133,7 +133,8 @@ func cleanupApps() {
 	sessionToken := respBody.SessionToken
 
 	for _, id := range appsToDelete {
-		req, err := http.NewRequest("DELETE", origin+"/v1/app/"+id, nil)
+		endpoint := fmt.Sprintf("%s/v1/app/%s", origin, id)
+		req, err := http.NewRequest("DELETE", endpoint, nil)
 		if err != nil {
 			t.Fatal(err)
 		}
