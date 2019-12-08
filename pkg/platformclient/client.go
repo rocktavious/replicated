@@ -5,14 +5,14 @@ import (
 	"bytes"
 	"encoding/json"
 	"fmt"
+	apps "github.com/replicatedhq/replicated/gen/go/v1"
+	v2 "github.com/replicatedhq/replicated/gen/go/v2"
+	"github.com/replicatedhq/replicated/pkg/types"
 	"io/ioutil"
 	"net/http"
 
-	apps "github.com/replicatedhq/replicated/gen/go/v1"
 	channels "github.com/replicatedhq/replicated/gen/go/v1"
 	releases "github.com/replicatedhq/replicated/gen/go/v1"
-	v2 "github.com/replicatedhq/replicated/gen/go/v2"
-	"github.com/replicatedhq/replicated/pkg/types"
 )
 
 const apiOrigin = "https://api.replicated.com/vendor"
@@ -57,11 +57,11 @@ type HTTPClient struct {
 }
 
 // New returns a new  HTTP client.
-func New(apiKey string) Client {
+func New(apiKey string) *HTTPClient {
 	return NewHTTPClient(apiOrigin, apiKey)
 }
 
-func NewHTTPClient(origin string, apiKey string) Client {
+func NewHTTPClient(origin string, apiKey string) *HTTPClient {
 	c := &HTTPClient{
 		apiKey:    apiKey,
 		apiOrigin: origin,

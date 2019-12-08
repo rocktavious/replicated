@@ -36,8 +36,7 @@ type GraphQLClient struct {
 	GraphQLClient *graphql.Client
 }
 
-
-func NewGraphQLClient(origin string, apiKey string) Client {
+func NewGraphQLClient(origin string, apiKey string) *GraphQLClient {
 	c := &GraphQLClient{GraphQLClient: graphql.NewClient(origin, apiKey)}
 
 	return c
