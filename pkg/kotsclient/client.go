@@ -1,6 +1,8 @@
 package kotsclient
 
 import (
+	"fmt"
+	"github.com/pkg/errors"
 	channels "github.com/replicatedhq/replicated/gen/go/v1"
 	"github.com/replicatedhq/replicated/pkg/graphql"
 	"github.com/replicatedhq/replicated/pkg/types"
@@ -44,4 +46,35 @@ func NewGraphQLClient(origin string, apiKey string) *GraphQLClient {
 
 func (c *GraphQLClient) ExecuteRequest(requestObj graphql.Request, deserializeTarget interface{}) error {
 	return c.GraphQLClient.ExecuteRequest(requestObj, deserializeTarget)
+}
+
+func (c *GraphQLClient) GetCustomerByNameOrID(appID string, customerNameOrID string) (*types.Customer, error) {
+	customers, err := c.ListCustomers(appID)
+	if err != nil {
+		return nil, errors.Wrap(err, "list customers")
+	}
+
+	matchingCustomers := make([]*types.Customer, 0)
+	for _, customer := range customers {
+		if customer.ID == customerNameOrID || customer.Name == customerNameOrID {
+			matchingCustomers = append(matchingCustomers, &types.Customer{
+				ID:   customer.ID,
+				Name: customer.Name,
+			})
+		}
+	}
+
+	if len(matchingCustomers) == 0 {
+		return nil, fmt.Errorf("could not find customer %q", customerNameOrID)
+	}
+
+	if len(matchingCustomers) > 1 {
+		return nil, fmt.Errorf("customer %q is ambiguous, please use customer ID", customerNameOrID)
+	}
+
+    return matchingCustomers[0], nil
+}
+
+func (c *GraphQLClient) GetCustomerLicense(appID string, customerID string) ([]byte, error) {
+	return nil, errors.New("not implemented")
 }

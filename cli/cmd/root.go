@@ -166,11 +166,12 @@ func Execute(rootCmd *cobra.Command, stdin io.Reader, stdout io.Writer, stderr i
 			appSlugOrID = os.Getenv("REPLICATED_APP")
 		}
 
-		appType, err := commonAPI.GetAppType(appSlugOrID)
+		appType, appName, err := commonAPI.GetAppType(appSlugOrID)
 		if err != nil {
 			return err
 		}
 		runCmds.appType = appType
+		runCmds.appName = appName
 
 		if appType == "platform" {
 			app, err := platformAPI.GetApp(appSlugOrID)

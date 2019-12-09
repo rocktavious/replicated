@@ -32,3 +32,30 @@ func (c *Client) CreateCustomer(appType string, name string, channelID string, e
 	return nil, errors.Errorf("unknown app type %q", appType)
 
 }
+
+func (c *Client) GetCustomerByNameOrID(appID string, appType string, customerNameOrID string) (*types.Customer, error) {
+
+	if appType == "platform" {
+		return nil, errors.New("listing customers is not supported for platform applications")
+	} else if appType == "ship" {
+		return nil, errors.New("listing customers is not supported for ship applications")
+	} else if appType == "kots" {
+		return c.KotsClient.GetCustomerByNameOrID(appID, customerNameOrID)
+	}
+
+	return nil, errors.Errorf("unknown app type %q", appType)
+}
+
+func (c *Client) GetCustomerLicense(appID string, appType string, customerID string) ([]byte, error) {
+	if appType == "platform" {
+		return nil, errors.New("listing customers is not supported for platform applications")
+	} else if appType == "ship" {
+		return nil, errors.New("listing customers is not supported for ship applications")
+	} else if appType == "kots" {
+		return c.KotsClient.GetCustomerLicense(appID, customerID)
+	}
+
+	return nil, errors.Errorf("unknown app type %q", appType)
+
+}
+

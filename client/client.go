@@ -22,22 +22,22 @@ func NewClient(platformOrigin string, graphqlOrigin string, apiToken string) Cli
 	return client
 }
 
-func (c *Client) GetAppType(appID string) (string, error) {
+func (c *Client) GetAppType(appID string) (string, string, error) {
 	platformApp, err := c.PlatformClient.GetApp(appID)
 	if err == nil && platformApp != nil {
-		return "platform", nil
+		return "platform", platformApp.Name, nil
 	}
 
 	shipApp, err := c.ShipClient.GetApp(appID)
 	if err == nil && shipApp != nil {
-		return "ship", nil
+		return "ship", shipApp.Name, nil
 	}
 
 	kotsApp, err := c.KotsClient.GetApp(appID)
 	if err == nil && kotsApp != nil {
-		return "kots", nil
+		return "kots", kotsApp.Name, nil
 	}
 
-	return "", err
+	return "", "", err
 }
 

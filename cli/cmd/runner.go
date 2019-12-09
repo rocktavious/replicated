@@ -19,6 +19,7 @@ import (
 type runners struct {
 	appID       string
 	appType     string
+	appName     string
 	api         client.Client
 	platformAPI *platformclient.HTTPClient
 	shipAPI     *shipclient.GraphQLClient
@@ -78,8 +79,10 @@ type runnerArgs struct {
 	entitlementsSetValueValue            string
 	entitlementsSetValueType             string
 
-	customerCreateName          string
-	customerCreateChannel       string
-	customerCreateEnsureChannel bool
+	customerCreateName           string
+	customerCreateChannel        string
+	customerCreateEnsureChannel  bool
 	customerCreateExpiryDuration time.Duration
+
+	customerGetLicenseOutputPath string
 }
